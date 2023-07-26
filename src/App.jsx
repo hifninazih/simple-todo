@@ -21,8 +21,15 @@ class App extends React.Component {
       id,
       title,
     };
+
     const newTodos = this.state.todos;
-    newTodos.splice(id - 1, 1, newdata);
+
+    for (let i = 0; i < this.state.todos.length; i++) {
+      if (this.state.todos[i].id === id) {
+        newTodos.splice(i, 1, newdata);
+      }
+    }
+
     this.setState({
       todos: newTodos,
       isEdit: false,

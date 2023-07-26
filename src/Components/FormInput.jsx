@@ -28,6 +28,7 @@ function FormInput({ add }) {
             className="w-full font-semibold bg-slate-200 outline-none  px-5 py-2
             focus:bg-gradient-to-tl focus:from-sky-300 focus:to-sky-500 focus:placeholder:text-slate-50 focus:text-slate-50 rounded-full transition"
             placeholder="addTask"
+            autoFocus
           />
         </div>
         <div>
