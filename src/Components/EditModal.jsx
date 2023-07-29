@@ -17,7 +17,6 @@ const EditModal = ({ edit, close, change, data, update }) => {
               placeholder="Edit Task"
               value={data.title}
               onChange={change}
-              autoFocus
             />
           </div>
           <div className="flex">
