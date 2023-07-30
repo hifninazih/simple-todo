@@ -3,11 +3,13 @@ import FormInput from "./Components/FormInput";
 import React from "react";
 import EditModal from "./Components/EditModal";
 import "./App.css";
+import DeleteModal from "./Components/DeleteModal";
 
 class App extends React.Component {
   state = {
     todos: JSON.parse(localStorage.getItem("todos")) || [],
     isEdit: false,
+    isDelete: false,
     editData: {
       id: "",
       title: "",
@@ -59,9 +61,20 @@ class App extends React.Component {
     });
   };
 
+  openDeleteModal = (id, title) => {
+    this.setState({
+      isDelete: true,
+      editData: {
+        id: id,
+        title: title,
+      },
+    });
+  };
+
   closeModal = () => {
     this.setState({
       isEdit: false,
+      isDelete: false,
     });
   };
 
@@ -113,7 +126,7 @@ class App extends React.Component {
                 <TodoItem
                   key={todo.id}
                   todo={todo.title}
-                  del={() => this.deleteTask(todo.id)}
+                  del={() => this.openDeleteModal(todo.id, todo.title)}
                   edt={() => this.openModal(todo.id, todo.title)}
                 />
               ))}
@@ -129,6 +142,13 @@ class App extends React.Component {
           change={this.setTitle}
           data={this.state.editData}
           update={this.update}
+        />
+
+        <DeleteModal
+          del={this.state.isDelete}
+          close={this.closeModal}
+          data={this.state.editData}
+          hapus={this.deleteTask}
         />
       </div>
     );
