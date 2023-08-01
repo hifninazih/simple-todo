@@ -13,14 +13,17 @@ class App extends React.Component {
     editData: {
       id: "",
       title: "",
+      ck: false,
     },
   };
 
-  update = () => {
-    const { id, title } = this.state.editData;
+  addCheck = (identity, status) => {
+    const index = this.state.todos.findIndex((item) => item.id === identity);
+    const { id, title, ck } = this.state.todos[index];
     const newdata = {
       id,
       title,
+      ck: status,
     };
 
     const newTodos = this.state.todos;
@@ -37,6 +40,35 @@ class App extends React.Component {
       editData: {
         id: "",
         title: "",
+        ck: false,
+      },
+    });
+    localStorage.setItem("todos", JSON.stringify(newTodos));
+  };
+
+  update = () => {
+    const { id, title, ck } = this.state.editData;
+    const newdata = {
+      id,
+      title,
+      ck,
+    };
+
+    const newTodos = this.state.todos;
+
+    for (let i = 0; i < this.state.todos.length; i++) {
+      if (this.state.todos[i].id === id) {
+        newTodos.splice(i, 1, newdata);
+      }
+    }
+
+    this.setState({
+      todos: newTodos,
+      isEdit: false,
+      editData: {
+        id: "",
+        title: "",
+        ck: false,
       },
     });
     localStorage.setItem("todos", JSON.stringify(newTodos));
@@ -51,12 +83,13 @@ class App extends React.Component {
     });
   };
 
-  openModal = (id, title) => {
+  openModal = (id, title, ck) => {
     this.setState({
       isEdit: true,
       editData: {
         id: id,
         title: title,
+        ck: ck,
       },
     });
   };
@@ -98,6 +131,7 @@ class App extends React.Component {
     const newData = {
       id: id,
       title: text,
+      ck: false,
     };
 
     this.setState({
@@ -108,6 +142,20 @@ class App extends React.Component {
       "todos",
       JSON.stringify([...this.state.todos, newData])
     );
+  };
+
+  cekboks = (todo) => {
+    // Get the checkbox
+    let checkBox = document.getElementById(`todo-${todo.id}`);
+
+    // If the checkbox is checked, display the output text
+    if (checkBox.checked == true) {
+      // console.log(`checked-${todo.id}`);
+      this.addCheck(todo.id, true);
+    } else {
+      this.addCheck(todo.id, false);
+      // console.log(`unchecked-${todo.id}`);
+    }
   };
 
   render() {
@@ -125,9 +173,10 @@ class App extends React.Component {
               {todos.map((todo) => (
                 <TodoItem
                   key={todo.id}
-                  todo={todo.title}
+                  todo={todo}
                   del={() => this.openDeleteModal(todo.id, todo.title)}
-                  edt={() => this.openModal(todo.id, todo.title)}
+                  edt={() => this.openModal(todo.id, todo.title, todo.ck)}
+                  cekboks={this.cekboks}
                 />
               ))}
             </div>
